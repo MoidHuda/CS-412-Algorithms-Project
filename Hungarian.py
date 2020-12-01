@@ -1,31 +1,3 @@
-#!/usr/bin/python
-# ecole polytechnique - c.durr - 2009
-
-# Kuhn-Munkres, The hungarian algorithm.  Complexity O(n^3)
-# Computes a max weight perfect matching in a bipartite graph
-# for min weight matching, simply negate the weights.
-
-""" Global variables:
-       n = number of vertices on each side
-       U,V vertex sets
-       lu,lv are the labels of U and V resp.
-       the matching is encoded as 
-       - a mapping Mu from U to V, 
-       - and Mv from V to U.
-    
-    The algorithm repeatedly builds an alternating tree, rooted in a
-    free vertex u0. S is the set of vertices in U covered by the tree.
-    For every vertex v, T[v] is the parent in the tree and Mv[v] the
-    child.
-    The algorithm maintains minSlack, s.t. for every vertex v not in
-    T, minSlack[v]=(val,u1), where val is the minimum slack
-    lu[u]+lv[v]-w[u][v] over u in S, and u1 is the vertex that
-    realizes this minimum.
-    Complexity is O(n^3), because there are n iterations in
-    maxWeightMatching, and each call to augment costs O(n^2). This is
-    because augment() makes at most n iterations itself, and each
-    updating of minSlack costs O(n).
-    """
 
 def improveLabels(val):
     """ change the labels, and maintain minSlack. 
@@ -47,7 +19,8 @@ def improveMatching(v):
     Mu[u] = v
     Mv[v] = u
 
-def slack(u,v): return lu[u]+lv[v]-w[u][v]
+def slack(u,v): 
+    return lu[u]+lv[v]-w[u][v]
 
 def augment():
     """ augment the matching, possibly improving the lablels on the way.
@@ -60,16 +33,16 @@ def augment():
             improveLabels(val)
         # now we are sure that (u,v) is saturated
         assert slack(u,v)==0
-        T[v] = u                            # add (u,v) to the tree
+        T[v] = u                            
         if v in Mv:
-            u1 = Mv[v]                      # matched edge, 
+            u1 = Mv[v]                      
             assert not u1 in S
-            S[u1] = True                    # ... add endpoint to tree 
-            for v in V:                     # maintain minSlack
+            S[u1] = True                    
+            for v in V:                    
                 if not v in T and minSlack[v][0] > slack(u1,v):
                     minSlack[v] = [slack(u1,v), u1]
         else:
-            improveMatching(v)              # v is a free vertex
+            improveMatching(v)             
             return
 
 def maxWeightMatching(weights):
@@ -81,26 +54,21 @@ def maxWeightMatching(weights):
     w  = weights
     n  = len(w)
     U  = V = range(n)
-    lu = [ max([w[u][v] for v in V]) for u in U]  # start with trivial labels
+    lu = [ max([w[u][v] for v in V]) for u in U]  
     lv = [ 0  for v in V]
-    Mu = {}                                       # start with empty matching
+    Mu = {}                                       
     Mv = {}
     while len(Mu)<n:
-        free = [u for u in V if u not in Mu]      # choose free vertex u0
+        free = [u for u in V if u not in Mu]      
         u0 = free[0]
-        S = {u0: True}                            # grow tree from u0 on
+        S = {u0: True}                            
         T = {}
         minSlack = [[slack(u0,v), u0] for v in V]
         augment()
-    #                                    val. of matching is total edge weight
     val = sum(lu)+sum(lv)
     return (Mu, Mv, val)
 
-
   
-#  a small example 
-
-# print (maxWeightMatching([[1,2,3,4],[2,4,6,8],[3,6,9,12],[4,8,12,16]]))
 if __name__ == '__main__':
     import timeit
     import numpy as np
@@ -112,13 +80,3 @@ if __name__ == '__main__':
     stop = timeit.default_timer()
 
     print('Time: ', stop - start)  
-
-# read from standard input a line with n
-# then n*n lines with u,v,w[u][v]
-
-# n = int(raw_input())
-# w = [[0 for v in range(n)] for u in range(n)]
-# for _ in range(n*n):
-#     u,v,w[u][v] = map(int, raw_input().split())
-
-# print maxWeightMatching(w)
