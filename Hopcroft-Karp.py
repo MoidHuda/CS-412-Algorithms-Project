@@ -32,6 +32,7 @@ def bipartiteMatch(graph):
                 else:
                     unmatched.append(v)
         
+        # did we finish layering without finding any alternating paths?
         if not unmatched:
             unlayered = {}
             for u in range(len(graph)):
@@ -60,11 +61,16 @@ def bipartiteMatch(graph):
 if __name__ == '__main__':
     import timeit
     import numpy as np
-    content = np.loadtxt('file1.txt').tolist()
+    from  networkx.algorithms import bipartite as nx 
+    from operator import itemgetter
+
+    G = nx.random_graph(1000,2000,0.2)
+    partition_l =   set(map(itemgetter(0),G.edges()))
+
+    content = nx.biadjacency_matrix(G,partition_l).toarray().tolist() 
      
     start = timeit.default_timer()
     bipartiteMatch(content)
-
     stop = timeit.default_timer()
 
     print('Time: ', stop - start)  
