@@ -78,6 +78,5 @@ if __name__ == "__main__":
   g.AddEdge('r', 't', 3)
   g.AddEdge('q', 'r', 4)
   g.AddEdge('q', 't', 2)
-  
   g.MaxFlow('s', 't')
   
