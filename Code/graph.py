@@ -1,46 +1,3 @@
-# # from  networkx.algorithms import bipartite as nx 
-# # from operator import itemgetter
-# # import numpy as np
-
-# # G = nx.random_graph(5000,5000,0.4)
-# # partition_l =   set(map(itemgetter(0),G.edges()))
-
-# # np.savetxt("file1.txt", nx.biadjacency_matrix(G,partition_l).toarray()) 
-
-# if __name__ == '__main__':
-#     import timeit
-#     import numpy as np
-#     from  networkx.algorithms import bipartite as nx
-#     import networkx.convert as nc
-#     from hungarian_algorithm import algorithm 
-
-#     for i,j in [(a := int(np.random.uniform()*k), k-a) for k in range(0,10000,500)]:
-
-#         G = nx.random_graph(i,j,0.3)
-#         content = nx.biadjacency_matrix(G,partition_l).toarray().tolist() 
-#         # print(len(content))
-
-#         start = timeit.default_timer()
-#         bipartiteMatch(content)
-#         stop = timeit.default_timer()
-
-#         print('Hopcroft-Karp Time: n: %d',i+j, stop - start)  
-        
-#         g = Graph(content) 
-
-#         source = 0; sink = i
-#         start = timeit.default_timer()
-#         flow, parent = g.FordFulkerson(source, sink)
-#         stop = timeit.default_timer()
-
-#         print('Hungarian Time: n: %d',i+j, stop - start)  
-
-#         G = nx.random_graph((i+j)//2,(i+j)//2,0.3)
-#         start = timeit.default_timer()
-#         algorithm.find_matching(G,matching_type = 'max', return_type = 'list')
-#         stop = timeit.default_timer()
-
-#         print('Hungarian Time: n: %d',i+j, stop - start)  
 
 class Edge(object):
   def __init__(self, u, v, w):
@@ -206,26 +163,6 @@ if __name__ == '__main__':
         stop = timeit.default_timer()
 
         print('Hopcroft-Karp Time: n: ',i+j, stop - start)  
-
-        # g = FlowNetwork()
-
-        
-        # A, B = nx.sets(G)
-        # edges = G.edges()
-        # for i in edges:
-        #   if i[0] in A:
-        #     g.AddEdge(i[0],i[1],1)
-        # for i in A:
-        #   g.AddEdge("source",i,1)
-        # for j in B:
-        #   g.AddEdge(j,"sink",1)
-
-        # start = timeit.default_timer()
-        # g.MaxFlow('source', 'sink')
-        # # fl.maximum_flow(G,"source", "sink",capacity=1)
-        # stop = timeit.default_timer()
-
-        # print('Ford Fulkerson: n: ',i+j, stop - start)  
 
         G = nx.random_graph((i+j)//2,(i+j)//2,1)
         start = timeit.default_timer()

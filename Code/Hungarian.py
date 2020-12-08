@@ -1,4 +1,3 @@
-
 def improveLabels(val):
     """ change the labels, and maintain minSlack. 
     """
